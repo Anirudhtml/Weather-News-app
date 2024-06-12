@@ -33,3 +33,22 @@
 .news-container a:hover {
     color: rgba(70, 150, 255, 0.7);
 }
+
+@media (max-width: 600px) {
+    .news-container {
+        padding: 15px;
+        margin-left: 20px;
+    }
+
+    .news-container h1 {
+        font-size: 1.2em;
+    }
+
+    .news-container p {
+        font-size: 0.9em;
+    }
+
+    .news-container a {
+        font-size: 0.9em;
+    }
+}

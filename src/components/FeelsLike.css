@@ -17,3 +17,20 @@
     margin: 20px 70px;
     font-size: 20px;
 }
+
+@media (max-width: 600px) {
+    .third-container {
+        width: 90%;
+        margin: 20px 0;
+        padding: 15px;
+        flex-direction: column; /* Stack items vertically on small screens */
+        justify-content: center;
+        align-items: center;
+    }
+
+    .feels-like {
+        margin: 10px 0;
+        font-size: 18px;
+        text-align: center; /* Center text on small screens */
+    }
+}

@@ -30,16 +30,16 @@ function App() {
 
   const getNews = useCallback(async (location) => {
     const newsApiKey = process.env.REACT_APP_NEWS_API_KEY;
-    const news_url = `https://newsapi.org/v2/everything?q=${location}&from=2024-05-12&sortBy=publishedAt&apiKey=${newsApiKey}`;
+    const news_url = `https://api.thenewsapi.com/v1/news/all?api_token=${newsApiKey}&search=${location}`;
 
     try {
       const response = await fetch(news_url);
       const data = await response.json();
 
       const newsNewData = {
-        title: data.articles[0].title,
-        description: data.articles[0].description,
-        link: data.articles[0].url,
+        title: data.data[0].title,
+        description: data.data[0].description,
+        link: data.data[0].url,
         load: true,
       };
 

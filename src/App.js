@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import SearchBar from "./components/SearchBar";
 import WeatherToday from "./components/weather-today";
 import News from "./components/News";
@@ -8,10 +8,8 @@ import Footer from "./components/Footer";
 import "./App.css";
 
 function App() {
-
   const [userInput, setUserInput] = useState("");
-  const [apiData, setApiData] = useState([]);
-  const [coordinates, setCoordinates] = useState({ lat: null, long: null });
+  // Removed the unused apiData and coordinates states
   const [weatherReport, setWeatherReport] = useState({
     icon: null,
     location: null,
@@ -20,7 +18,7 @@ function App() {
     feels_like: null,
     humidity: null,
     pressure: null,
-    visibilty: null,
+    visibility: null,
     load: false,
   });
   const [news, setNews] = useState({
@@ -30,29 +28,28 @@ function App() {
     load: false,
   });
 
-  async function getData(userInput) {
-    const dataApiKey = process.env.REACT_APP_DATA_API_KEY;
-    const url = `https://geocode.maps.co/search?q=${userInput}&api_key=${dataApiKey}`;
+  const getNews = useCallback(async (location) => {
+    const newsApiKey = process.env.REACT_APP_NEWS_API_KEY;
+    const news_url = `https://newsapi.org/v2/everything?q=${location}&from=2024-05-12&sortBy=publishedAt&apiKey=${newsApiKey}`;
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(news_url);
       const data = await response.json();
 
-      const lat = data[0].lat;
-      const long = data[0].lon;
+      const newsNewData = {
+        title: data.articles[0].title,
+        description: data.articles[0].description,
+        link: data.articles[0].url,
+        load: true,
+      };
 
-      if (data && data.length > 0) {
-        setCoordinates({ lat, long });
-        setApiData(data);
-
-        getWeatherData(lat, long);
-      }
+      setNews(newsNewData);
     } catch (err) {
       console.log(err);
     }
-  }
+  }, []);
 
-  async function getWeatherData(lat, long) {
+  const getWeatherData = useCallback(async (lat, long) => {
     const weatherApiKey = process.env.REACT_APP_WEATHER_API_KEY;
     const weather_url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${weatherApiKey}`;
 
@@ -79,28 +76,27 @@ function App() {
     } catch (err) {
       console.log(err);
     }
-  }
+  }, [getNews]);
 
-  async function getNews(location) {
-    const newsApiKey = process.env.REACT_APP_NEWS_API_KEY;
-    const news_url = `https://newsapi.org/v2/everything?q=${location}&from=2024-05-11&sortBy=publishedAt&apiKey=${newsApiKey}`;
+  const getData = useCallback(async (userInput) => {
+    const dataApiKey = process.env.REACT_APP_DATA_API_KEY;
+    const url = `https://geocode.maps.co/search?q=${userInput}&api_key=${dataApiKey}`;
 
     try {
-      const response = await fetch(news_url);
+      const response = await fetch(url);
       const data = await response.json();
 
-      const newsNewData = {
-        title: data.articles[0].title,
-        description: data.articles[0].description,
-        link: data.articles[0].url,
-        load: true,
-      };
+      if (data && data.length > 0) {
+        const lat = data[0].lat;
+        const long = data[0].lon;
 
-      setNews(newsNewData);
+        // No need to set apiData and coordinates as they are removed
+        getWeatherData(lat, long);
+      }
     } catch (err) {
       console.log(err);
     }
-  }
+  }, [getWeatherData]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -111,7 +107,7 @@ function App() {
     }, 1000);
 
     return () => clearTimeout(timeout);
-  }, [userInput]);
+  }, [userInput, getData]); // Added getData to the dependency array
 
   return (
     <>

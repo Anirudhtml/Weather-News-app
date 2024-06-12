@@ -1,0 +1,19 @@
+.third-container {
+    width: 600px;
+    height: auto;
+    background-color: rgba(65, 65, 65, 0.308);
+    border: 0.4px solid rgba(255, 255, 255, 0.255);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin: 20px 30%;
+    padding: 30px;
+    color: white;
+    overflow: hidden; /* Ensures that overflow content is not visible */
+    display: flex;
+    justify-content: space-between;
+}
+
+.feels-like {
+    margin: 20px 70px;
+    font-size: 20px;
+}

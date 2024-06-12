@@ -1,0 +1,8 @@
+.item-container {
+    display: flex;
+    padding: 10px;
+}
+
+#name {
+    margin-right: 100px;
+}

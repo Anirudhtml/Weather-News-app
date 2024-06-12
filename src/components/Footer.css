@@ -1,0 +1,15 @@
+footer p {
+    text-align: center;
+    color: white;
+    font-size: medium;
+    margin-top: 5%;
+    text-decoration: none;
+}
+
+footer p a {
+    color: rgb(255, 255, 255);
+}
+
+footer p a:hover {
+    color: rgba(32, 219, 207, 0.699);
+}
